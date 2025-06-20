@@ -1,11 +1,12 @@
-@HU_SimpleEndpoint
-Feature: Test de API súper simple
+@HU_MarvelCharacters
+Feature: Gestión de personajes Marvel
 
   Background:
-    * configure ssl = true
+    * def config = karate.callSingle('classpath:karate-config.js')
+    * url config.baseUrl + '/' + config.username + '/api/characters'
 
-  @smoke @regression @HU_SimpleEndpoint
-  Scenario: Verificar que un endpoint público responde 200
-    Given url 'https://httpbin.org/get'
+  @getAll @smoke @HU_MarvelCharacters
+  Scenario: Obtener todos los personajes
     When method get
     Then status 200
+    #* match response == { ... }
