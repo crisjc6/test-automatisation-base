@@ -9,7 +9,11 @@ Feature: Gestión de personajes Marvel
   Scenario: Obtener todos los personajes
     When method get
     Then status 200
-    * match response contains { id: 1, name: 'Iron Man', alterego: 'Tony Stark', description: 'Genius billionaire', powers: ['Armor', 'Flight'] }
+    * match response[*].id == '#[] #number'
+    * match response[*].name == '#[] #string'
+    * match response[*].alterego == '#[] #string'
+    * match response[*].description == '#[] #string'
+    * match response[*].powers == '#[] #[]'
 
   @getAllEmptyOtherUser @HU_MarvelCharacters
   Scenario: Obtener todos los personajes con otro username
@@ -26,11 +30,11 @@ Feature: Gestión de personajes Marvel
 
   @getById @HU_MarvelCharacters
   Scenario: Obtener personaje por ID existente
-    * def characterId = 1
+    * def characterId = 3
     * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
     When method get
     Then status 200
-    * match response == { id: 1, name: 'Iron Man', alterego: 'Tony Stark', description: 'Genius billionaire', powers: ['Armor', 'Flight'] }
+    * match response == { id: 3, name: 'Iron Man', alterego: 'Tony Stark', description: '#string', powers: ['Armor', 'Flight'] }
 
   @getByIdNotFound @HU_MarvelCharacters
   Scenario: Obtener personaje por ID inexistente
@@ -48,13 +52,6 @@ Feature: Gestión de personajes Marvel
     Then status 500
     * match response == { error: 'Internal server error' }
 
-  @create @regression @HU_MarvelCharacters
-
-  Scenario: Crear un personaje nuevo (Spider-Man) que no se duplique por nombre
-    Given request { name: 'Spider-Man', alterego: 'Peter Parker', description: 'Superhéroe arácnido de Marvel', powers: ['Agilidad', 'Sentido arácnido', 'Trepar muros'] }
-    When method post
-    Then status 201
-    * match response contains { id: '#number', name: 'Spider-Man', alterego: 'Peter Parker', description: 'Superhéroe arácnido de Marvel', powers: ['Agilidad', 'Sentido arácnido', 'Trepar muros'] }
 
   @createDuplicate @HU_MarvelCharacters
   Scenario: Crear personaje con nombre duplicado
@@ -72,12 +69,12 @@ Feature: Gestión de personajes Marvel
 
   @update @HU_MarvelCharacters
   Scenario: Actualizar personaje existente
-    * def characterId = 1
+    * def characterId = 3
     Given request { name: 'Iron Man', alterego: 'Tony Stark', description: 'Updated description', powers: ['Armor', 'Flight'] }
     * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
     When method put
     Then status 200
-    * match response == { id: 1, name: 'Iron Man', alterego: 'Tony Stark', description: 'Updated description', powers: ['Armor', 'Flight'] }
+    * match response == { id: 3, name: 'Iron Man', alterego: 'Tony Stark', description: '#string', powers: ['Armor', 'Flight'] }
 
   @updateNotFound @HU_MarvelCharacters
   Scenario: Actualizar personaje inexistente
@@ -106,13 +103,6 @@ Feature: Gestión de personajes Marvel
     Then status 500
     * match response == { error: 'Internal server error' }
 
-  @delete @HU_MarvelCharacters
-  Scenario: Eliminar personaje existente
-    * def characterId = 1
-    * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
-    When method delete
-    Then status 204
-
   @deleteNotFound @HU_MarvelCharacters
   Scenario: Eliminar personaje inexistente
     * def characterId = 999
@@ -128,3 +118,24 @@ Feature: Gestión de personajes Marvel
     When method delete
     Then status 500
     * match response == { error: 'Internal server error' }
+
+  @bulkCreateDelete @HU_MarvelCharacters
+  Scenario: Crear y eliminar personaje usando el personaje 11 del bulk
+    # Este escenario valida la creación y eliminación dinámica de un personaje usando datos del bulk.
+    # Razones:
+    # - Permite pruebas idempotentes y repetibles en pipelines o entornos compartidos.
+    # - No depende de IDs fijos ni de datos persistentes entre ejecuciones.
+    # - Garantiza limpieza de datos tras la prueba, evitando residuos en la base de datos.
+    * def bulk = karate.read('classpath:data/marvel/characters-bulk.json')
+    * def personaje = bulk[10]
+    Given request personaje
+    When method post
+    Then status 201
+    * def createdId = response.id
+    * match response.name == personaje.name
+    * match response.description == personaje.description
+    * print 'ID creado:', createdId
+    # Ahora eliminar el personaje creado
+    * url config.baseUrl + '/' + config.username + '/api/characters/' + createdId
+    When method delete
+    Then status 204

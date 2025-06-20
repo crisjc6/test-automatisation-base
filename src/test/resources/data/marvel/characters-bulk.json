@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Iron Man",
+    "alterego": "Tony Stark",
+    "description": "Genius billionaire",
+    "powers": ["Armor", "Flight"]
+  },
+  {
+    "name": "Spider-Man",
+    "alterego": "Peter Parker",
+    "description": "Superhéroe arácnido de Marvel",
+    "powers": ["Agilidad", "Sentido arácnido", "Trepar muros"]
+  },
+  {
+    "name": "Hulk",
+    "alterego": "Bruce Banner",
+    "description": "Fuerza descomunal y regeneración",
+    "powers": ["Fuerza", "Regeneración"]
+  },
+  {
+    "name": "Thor",
+    "alterego": "Thor Odinson",
+    "description": "Dios del trueno",
+    "powers": ["Martillo Mjolnir", "Control del trueno"]
+  },
+  {
+    "name": "Black Widow",
+    "alterego": "Natasha Romanoff",
+    "description": "Espía y experta en combate cuerpo a cuerpo",
+    "powers": ["Agilidad", "Combate"]
+  },
+  {
+    "name": "Captain America",
+    "alterego": "Steve Rogers",
+    "description": "Súper soldado con escudo indestructible",
+    "powers": ["Fuerza", "Liderazgo", "Escudo"]
+  },
+  {
+    "name": "Doctor Strange",
+    "alterego": "Stephen Strange",
+    "description": "Hechicero Supremo",
+    "powers": ["Magia", "Manipulación del tiempo"]
+  },
+  {
+    "name": "Black Panther",
+    "alterego": "T'Challa",
+    "description": "Rey de Wakanda",
+    "powers": ["Agilidad", "Tecnología avanzada"]
+  },
+  {
+    "name": "Scarlet Witch",
+    "alterego": "Wanda Maximoff",
+    "description": "Manipulación de la realidad",
+    "powers": ["Magia", "Telequinesis"]
+  },
+  {
+    "name": "Vision",
+    "alterego": "Vision",
+    "description": "Sintesoide con gema de la mente",
+    "powers": ["Vuelo", "Proyección de energía"]
+  },
+  {
+    "name": "Falcon",
+    "alterego": "Sam Wilson",
+    "description": "Aliado de Captain America",
+    "powers": ["Vuelo", "Combate"]
+  },
+  {
+    "name": "Winter Soldier",
+    "alterego": "Bucky Barnes",
+    "description": "Soldado con brazo biónico",
+    "powers": ["Fuerza", "Combate"]
+  },
+  {
+    "name": "Ant-Man",
+    "alterego": "Scott Lang",
+    "description": "Puede encogerse y crecer",
+    "powers": ["Cambio de tamaño", "Comunicación con insectos"]
+  },
+  {
+    "name": "Wasp",
+    "alterego": "Hope van Dyne",
+    "description": "Puede encogerse y volar",
+    "powers": ["Cambio de tamaño", "Vuelo"]
+  },
+  {
+    "name": "Hawkeye",
+    "alterego": "Clint Barton",
+    "description": "Arquero experto",
+    "powers": ["Puntería", "Combate"]
+  },
+  {
+    "name": "Star-Lord",
+    "alterego": "Peter Quill",
+    "description": "Líder de los Guardianes de la Galaxia",
+    "powers": ["Tecnología avanzada", "Combate"]
+  }
+]
