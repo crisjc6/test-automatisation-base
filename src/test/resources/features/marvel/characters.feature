@@ -106,3 +106,25 @@ Feature: Gestión de personajes Marvel
     Then status 500
     * match response == { error: 'Internal server error' }
 
+  @delete @HU_MarvelCharacters
+  Scenario: Eliminar personaje existente
+    * def characterId = 1
+    * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
+    When method delete
+    Then status 204
+
+  @deleteNotFound @HU_MarvelCharacters
+  Scenario: Eliminar personaje inexistente
+    * def characterId = 999
+    * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
+    When method delete
+    Then status 404
+    * match response == { error: 'Character not found' }
+
+  @delete500 @HU_MarvelCharacters
+  Scenario: Eliminar personaje con ID inválido (error 500)
+    * def characterId = 'aasdf'
+    * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
+    When method delete
+    Then status 500
+    * match response == { error: 'Internal server error' }
