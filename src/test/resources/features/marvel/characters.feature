@@ -70,3 +70,39 @@ Feature: Gestión de personajes Marvel
     Then status 400
     * match response contains { name: '#string', alterego: '#string', description: '#string', powers: '#string' }
 
+  @update @HU_MarvelCharacters
+  Scenario: Actualizar personaje existente
+    * def characterId = 1
+    Given request { name: 'Iron Man', alterego: 'Tony Stark', description: 'Updated description', powers: ['Armor', 'Flight'] }
+    * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
+    When method put
+    Then status 200
+    * match response == { id: 1, name: 'Iron Man', alterego: 'Tony Stark', description: 'Updated description', powers: ['Armor', 'Flight'] }
+
+  @updateNotFound @HU_MarvelCharacters
+  Scenario: Actualizar personaje inexistente
+    * def characterId = 999
+    Given request { name: 'Iron Man', alterego: 'Tony Stark', description: 'Updated description', powers: ['Armor', 'Flight'] }
+    * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
+    When method put
+    Then status 404
+    * match response == { error: 'Character not found' }
+
+  @updateInvalid @HU_MarvelCharacters
+  Scenario: Actualizar personaje con datos inválidos
+    * def characterId = 1
+    Given request { name: '', alterego: '', description: '', powers: [] }
+    * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
+    When method put
+    Then status 400
+    * match response contains { name: '#string', alterego: '#string', description: '#string', powers: '#string' }
+
+  @update500 @HU_MarvelCharacters
+  Scenario: Actualizar personaje con ID inválido (error 500)
+    * def characterId = 'aasdf'
+    Given request { name: 'Iron Man', alterego: 'Tony Stark', description: 'Updated description', powers: ['Armor', 'Flight'] }
+    * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
+    When method put
+    Then status 500
+    * match response == { error: 'Internal server error' }
+
