@@ -24,3 +24,27 @@ Feature: Gestión de personajes Marvel
     When method get
     Then status 200  //500
 
+  @getById @HU_MarvelCharacters
+  Scenario: Obtener personaje por ID existente
+    * def characterId = 1
+    * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
+    When method get
+    Then status 200
+    * match response == { id: 1, name: 'Iron Man', alterego: 'Tony Stark', description: 'Genius billionaire', powers: ['Armor', 'Flight'] }
+
+  @getByIdNotFound @HU_MarvelCharacters
+  Scenario: Obtener personaje por ID inexistente
+    * def characterId = 999
+    * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
+    When method get
+    Then status 404
+    * match response == { error: 'Character not found' }
+
+  @getById500 @HU_MarvelCharacters
+  Scenario: Obtener personaje por ID inválido (error 500)
+    * def characterId = 'aasdf!=)'
+    * url config.baseUrl + '/' + config.username + '/api/characters/' + characterId
+    When method get
+    Then status 500
+    * match response == { error: 'Internal server error' }
+
