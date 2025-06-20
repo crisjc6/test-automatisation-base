@@ -48,3 +48,25 @@ Feature: Gestión de personajes Marvel
     Then status 500
     * match response == { error: 'Internal server error' }
 
+  @create @regression @HU_MarvelCharacters
+
+  Scenario: Crear un personaje nuevo (Spider-Man) que no se duplique por nombre
+    Given request { name: 'Spider-Man', alterego: 'Peter Parker', description: 'Superhéroe arácnido de Marvel', powers: ['Agilidad', 'Sentido arácnido', 'Trepar muros'] }
+    When method post
+    Then status 201
+    * match response contains { id: '#number', name: 'Spider-Man', alterego: 'Peter Parker', description: 'Superhéroe arácnido de Marvel', powers: ['Agilidad', 'Sentido arácnido', 'Trepar muros'] }
+
+  @createDuplicate @HU_MarvelCharacters
+  Scenario: Crear personaje con nombre duplicado
+    Given request { name: 'Iron Man', alterego: 'Otro', description: 'Otro', powers: ['Armor'] }
+    When method post
+    Then status 400
+    * match response == { error: 'Character name already exists' }
+
+  @createInvalid @HU_MarvelCharacters
+  Scenario: Crear personaje con datos inválidos
+    Given request { name: '', alterego: '', description: '', powers: [] }
+    When method post
+    Then status 400
+    * match response contains { name: '#string', alterego: '#string', description: '#string', powers: '#string' }
+
